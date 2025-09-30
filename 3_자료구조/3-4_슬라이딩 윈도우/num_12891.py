@@ -1,67 +1,51 @@
-checkList = [0]*4  # [needA, needC, needG, needT]
-myList = [0]*4     # [cntA, cntC, cntG, cntT]
-checkSecret = 0    # 조건을 충족한 문자 종류의 수 (0~4)
+import sys
 
-def myadd(c):
-    global checkList, myList, checkSecret
-    if c == 'A':
-        myList[0] += 1
-        if myList[0] == checkList[0]:
-            checkSecret += 1
-    elif c == 'C':
-        myList[1] += 1
-        if myList[1] == checkList[1]:
-            checkSecret += 1
-    elif c == 'G':
-        myList[2] += 1
-        if myList[2] == checkList[2]:
-            checkSecret += 1
-    elif c == 'T':
-        myList[3] += 1
-        if myList[3] == checkList[3]:
-            checkSecret += 1
+s, p = map(int, sys.stdin.readline().split())
+arr=list(sys.stdin.readline().rstrip())
+a,c,g,t=map(int, sys.stdin.readline().split())
 
-def myremove(c):
-    global checkList, myList, checkSecret
-    if c == 'A':
-        if myList[0] == checkList[0]:
-            checkSecret -= 1
-        myList[0] -= 1
-    elif c == 'C':
-        if myList[1] == checkList[1]:
-            checkSecret -= 1
-        myList[1] -= 1
-    elif c == 'G':
-        if myList[2] == checkList[2]:
-            checkSecret -= 1
-        myList[2] -= 1
-    elif c == 'T':
-        if myList[3] == checkList[3]:
-            checkSecret -= 1
-        myList[3] -= 1
+answer = 0
+base_arr=arr[0:p]
 
-S, P = map(int, input().split())
-result = 0
-A = list(input().strip())
-checkList = list(map(int, input().split()))
+a_cnt=c_cnt=g_cnt=t_cnt=0
+for char in base_arr:
+    if char=='A':
+        a_cnt += 1
+    elif char=='C':
+        c_cnt += 1
+    elif char=='G':
+        g_cnt += 1
+    elif char=='T':
+        t_cnt += 1
 
-# 요구 개수가 0인 항목은 이미 충족된 것으로 간주
-for i in range(4):
-    if checkList[i] == 0:
-        checkSecret += 1
+if a_cnt>=a and c_cnt>=c and g_cnt>=g and t_cnt>=t:
+    answer+=1
 
-# 초기 윈도우 [0, P-1]
-for i in range(P):
-    myadd(A[i])
-if checkSecret == 4:
-    result += 1
+for i in range(s-p):
+    getOut=arr[i]
+    getIn=arr[i+p]
 
-# 슬라이딩 윈도우
-for i in range(P, S):
-    j=i-P
-    myadd(A[i])        # 새로 들어온 문자
-    myremove(A[j])   # 빠져나간 문자
-    if checkSecret == 4:
-        result += 1
+    #슬라이딩으로 인해 나가는 놈
+    if getOut=='A':
+            a_cnt-=1
+    elif getOut=='C':
+            c_cnt-=1
+    elif getOut=='G':
+            g_cnt-=1
+    elif getOut=='T':
+            t_cnt-=1
 
-print(result)
+    #슬라이딩으로 인해 들어오는 놈
+    if getIn=='A':
+            a_cnt+=1
+    elif getIn=='C':
+            c_cnt+=1
+    elif getIn=='G':
+            g_cnt+=1
+    elif getIn=='T':
+            t_cnt+=1
+
+    if a_cnt >= a and c_cnt >= c and g_cnt >= g and t_cnt >= t:
+        answer += 1
+
+print(answer)
