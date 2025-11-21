@@ -17,7 +17,7 @@
 ########################################
 # 방법2 (삽입 정렬 + 그리디)
 n = int(input())
-arr = list(map(int, input()))
+arr = list(map(int, input().split()))
 s = [0]*n
 
 for i in range(1,n):
@@ -29,5 +29,19 @@ for i in range(1,n):
             break
         if j==0:
             insert_point = 0
-    for j in range(i, insert_point, -1)
+    for j in range(i, insert_point, -1):
+        arr[j] = arr[j-1]
+    arr[insert_point] = insert_value
+
+s[0] = arr[0]
+
+for i in range(1,n):
+    s[i] = s[i-1] + arr[i]
+
+sum = 0
+
+for i in range(0,n):
+    sum += s[i]
+
+print(sum)
 
